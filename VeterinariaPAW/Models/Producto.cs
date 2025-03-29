@@ -9,7 +9,7 @@
         public string SKU { get; set; }
         public int IdCategoria { get; set; }
         public string Precio { get; set; }
-        public string Stock { get; set; }
+        public int Stock { get; set; }
         public int IdProveedor { get; set; }
         public string Tipo { get; set; }
         public bool? Estado { get; set; }

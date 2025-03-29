@@ -7,7 +7,7 @@
         public string Descripcion { get; set; }
 
         // Relación 1:N con Producto
-        public ICollection<Producto> Productos { get; set; }
+        public ICollection<Producto>? Productos { get; set; }
     }
 
 }

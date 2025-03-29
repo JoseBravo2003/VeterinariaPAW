@@ -9,6 +9,15 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<!-- Notificación de stock bajo -->
+@if (Model.Any(p => p.Stock < 10))
+{
+    <div class="alert alert-warning">
+        <strong>Atención:</strong> Algunos productos tienen menos de 10 unidades en stock.
+    </div>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -49,47 +58,51 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaCaducidad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SKU)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Precio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tipo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Clinico)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categoria.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Proveedor.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            //Con esta informacion podremos detectar cuales productos tienen menos de 10 
+            var rowClass = item.Stock < 10 ? "table-warning" : "";
+
+            <tr class="@rowClass">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaCaducidad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SKU)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Precio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Clinico)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Categoria.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Proveedor.Id)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
