@@ -1,0 +1,241 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+
+    <div class="text-center">
+        <h1 class="display-4">Tienda Veterinaria PAW</h1>
+        <p class="lead text-muted">Todo lo que tu mascota necesita, en un solo lugar</p>
+    </div>
+
+    <!-- Slider Section -->
+    <div class="container-fluid">
+        <section class="slider_section" style="position: relative; width: 100%; overflow: hidden;">
+            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- Primer item -->
+                    <div class="carousel-item active">
+                        <div class="slider_img-box" style="position: relative; height: 500px;">
+                            <div class="img-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5);"></div>
+                            <img src="https://images.pexels.com/photos/1553235/pexels-photo-1553235.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Mascota" class="slider-image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">
+                        </div>
+                    </div>
+                    <!-- Segundo item -->
+                    <div class="carousel-item">
+                        <div class="slider_img-box" style="position: relative; height: 500px;">
+                            <div class="img-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5);"></div>
+                            <img src="https://images.pexels.com/photos/1093126/pexels-photo-1093126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Mascota" class="slider-image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">
+                        </div>
+                    </div>
+                    <!-- Tercer item -->
+                    <div class="carousel-item">
+                        <div class="slider_img-box" style="position: relative; height: 500px;">
+                            <div class="img-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5);"></div>
+                            <img src="https://images.pexels.com/photos/96428/pexels-photo-96428.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Mascota" class="slider-image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controles del slider -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </section>
+    </div>
+    <!-- End slider section -->
+    <!-- About Section -->
+    <section class="about_section layout_padding" style="background-color: #f4f4f4; padding: 50px 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="img-box">
+                        <img src="images/about.png" alt="" class="img-fluid" style="border-radius: 15px;">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="detail-box">
+                        <h2 class="display-4" style="font-size: 36px;">About Our <span style="color: #2DB2B5;">Pets Clinic</span></h2>
+                        <p class="text-muted" style="font-size: 1.2rem;">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Service Section -->
+    <section class="service_section layout_padding" style="padding: 50px 0;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 offset-md-2">
+                    <h2 class="custom_heading" style="font-size: 32px;">Our <span style="color: #2DB2B5;">Services</span></h2>
+                    <div class="container layout_padding2">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="img_box">
+                                    <img src="images/s-1.png" alt="" class="img-fluid" style="border-radius: 10px;">
+                                </div>
+                                <div class="detail_box">
+                                    <h6>Pet Care</h6>
+                                    <p>
+                                        Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="img_box">
+                                    <img src="images/s-2.png" alt="" class="img-fluid" style="border-radius: 10px;">
+                                </div>
+                                <div class="detail_box">
+                                    <h6>Pet Hotel</h6>
+                                    <p>
+                                        Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="img_box">
+                                    <img src="images/s-3.png" alt="" class="img-fluid" style="border-radius: 10px;">
+                                </div>
+                                <div class="detail_box">
+                                    <h6>Emergency</h6>
+                                    <p>
+                                        Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img src="images/tool.png" alt="" class="img-fluid w-100" style="border-radius: 15px;">
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Service Section -->
+    <!-- buy section -->
+    <section class="buy_section layout_padding" style="background-color: #f9f9f9; padding: 60px 0; text-align: center;">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; color: #333; font-weight: bold; margin-bottom: 20px;">
+                You Can Buy Pet From Our Clinic
+            </h2>
+            <p style="font-size: 1.2rem; color: #777; margin-bottom: 40px;">
+                Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <div>
+                <a href="your-buy-link" class="btn btn-primary" style="background-color: #2DB2B5; padding: 15px 30px; font-size: 1.1rem;">
+                    Buy Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- client section -->
+    <section class="client_section layout_padding-bottom" style="padding: 60px 0;">
+        <div class="container">
+            <h2 class="text-center mb-4" style="font-size: 2.5rem; color: #333;">
+                What Say Our <span style="color: #2DB2B5;">Clients</span>
+            </h2>
+            <p class="text-center mb-5" style="font-size: 1.2rem; color: #555;">
+                Hear what our happy clients have to say about our service!
+            </p>
+            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- Testimonio 1 -->
+                    <div class="carousel-item active">
+                        <div class="card" style="border-radius: 15px; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);">
+                            <div class="card-body text-center p-5" style="background-color: #fff;">
+                                <p class="mb-4" style="font-size: 1.2rem; color: #555; font-style: italic;">
+                                    "This is the best service I have ever used. It has made my life so much easier!"
+                                </p>
+                                <h4 style="font-size: 1.4rem; color: #2DB2B5;">John Doe</h4>
+                                <span style="font-size: 1.1rem; color: #777;">CEO, Example Corp</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonio 2 -->
+                    <div class="carousel-item">
+                        <div class="card" style="border-radius: 15px; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);">
+                            <div class="card-body text-center p-5" style="background-color: #fff;">
+                                <p class="mb-4" style="font-size: 1.2rem; color: #555; font-style: italic;">
+                                    "I couldn't be happier with the results. The team is amazing, and the service is top-notch!"
+                                </p>
+                                <h4 style="font-size: 1.4rem; color: #2DB2B5;">Jane Smith</h4>
+                                <span style="font-size: 1.1rem; color: #777;">Manager, XYZ Ltd</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonio 3 -->
+                    <div class="carousel-item">
+                        <div class="card" style="border-radius: 15px; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);">
+                            <div class="card-body text-center p-5" style="background-color: #fff;">
+                                <p class="mb-4" style="font-size: 1.2rem; color: #555; font-style: italic;">
+                                    "A reliable and innovative solution that exceeded my expectations. Highly recommend!"
+                                </p>
+                                <h4 style="font-size: 1.4rem; color: #2DB2B5;">Michael Johnson</h4>
+                                <span style="font-size: 1.1rem; color: #777;">Founder, Tech Innovators</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Controles del slider -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- info section -->
+    <section class="info_section layout_padding2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="item">
+                        <div class="card" style="text-align: center; padding: 20px; background-color: #2DB2B5;">
+                            <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: #fff; margin-bottom: 20px;"></i>
+                            <div class="detail-box">
+                                <p style="font-size: 1.2rem; color: #fff;">Location</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="item">
+                        <div class="card" style="text-align: center; padding: 20px; background-color: #2DB2B5;">
+                            <i class="fas fa-phone-alt" style="font-size: 3rem; color: #fff; margin-bottom: 20px;"></i>
+                            <div class="detail-box">
+                                <p style="font-size: 1.2rem; color: #fff;">+02 1234567890</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="item">
+                        <div class="card" style="text-align: center; padding: 20px; background-color: #2DB2B5;">
+                            <i class="fas fa-envelope" style="font-size: 3rem; color: #fff; margin-bottom: 20px;"></i>
+                            <div class="detail-box">
+                                <p style="font-size: 1.2rem; color: #fff;">demo@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end info_section -->
+</body>

@@ -1,0 +1,42 @@
+﻿@model LoginModeloUsuario
+
+@{
+    ViewData["Title"] = "Inicio de Sesión";
+}
+
+
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6">
+                <img class="card-img-top mb-5 mb-md-0 rounded" src="https://images.pexels.com/photos/1314550/pexels-photo-1314550.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="..." />
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-lg p-4">
+                    <h2 class="text-center mb-4">Iniciar Sesión</h2>
+
+                    @if (TempData["MensajeInicioFallido"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["MensajeInicioFallido"]</div>
+                    }
+
+                    <form asp-action="InicioSesion" method="post">
+                        <div class="mb-3">
+                            <label asp-for="Correo" class="form-label">Correo Electrónico</label>
+                            <input asp-for="Correo" class="form-control" placeholder="Ingresa tu correo" required />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Contraseña" class="form-label">Contraseña</label>
+                            <input asp-for="Contraseña" type="password" class="form-control" placeholder="Ingresa tu contraseña" required />
+                        </div>
+                        <button type="submit" class="btn-primary w-100">Iniciar Sesión</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p>¿Aun no tienes una cuenta? <a asp-controller="Acceso" asp-action="RegistroUsuario"> Registrarse</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,34 @@
+﻿
+<header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+        <a asp-action="Index" asp-controller="Home" class="logo d-flex align-items-center me-auto">        
+            <h1 class="sitename">PAW</h1>
+        </a>
+        <nav id="navmenu" class="navmenu">               
+            <ul>
+                <li><a class="active" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a></li>
+                <li> <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                <li><a asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a></li>
+                <li><a asp-area="" asp-controller="Proveedores" asp-action="Index">Proveedores</a></li>
+                <li><a asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a></li>
+                <li><a asp-area="" asp-controller="Productos" asp-action="Index">Productos</a></li>
+                <li class="">                   
+                    <a href="@Url.Action("Logout", "Acceso")" class="">Cerrar Sesión</a>
+                </li>
+                <li class="pe-2">
+                    <form asp-area="" asp-controller="Acceso" asp-action="InicioSesion" method="get">
+                        <button type="submit" class="btn btn-xs btn-primary p-2">Iniciar Sesión</button>
+                    </form>
+                </li>
+                <li>
+                    <form asp-area="" asp-controller="Acceso" asp-action="RegistroUsuario" method="get">
+                        <button type="submit" class="btn btn-xs btn-outline-primary p-2">Registrarse</button>
+                    </form>
+                </li>
+
+                
+            </ul>   
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+    </div>
+</header>
