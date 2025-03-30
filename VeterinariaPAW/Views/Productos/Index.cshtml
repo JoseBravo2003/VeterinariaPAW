@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<VeterinariaPAW.Models.Producto>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Productos";
 }
 
-<h1>Index</h1>
+<h1>Productos</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -26,13 +26,8 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaCaducidad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SKU)
-            </th>
+            </th>          
+            
             <th>
                 @Html.DisplayNameFor(model => model.Precio)
             </th>
@@ -41,26 +36,16 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Tipo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Clinico)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Categoria)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Proveedor)
-            </th>
+            </th>           
+            
+            
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            //Con esta informacion podremos detectar cuales productos tienen menos de 10 
+            //Con esta informacion podremos detectar cuales productos tienen menos de 10    
             var rowClass = item.Stock < 10 ? "table-warning" : "";
 
             <tr class="@rowClass">
@@ -69,13 +54,8 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Descripcion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaCaducidad)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SKU)
-                </td>
+                </td>             
+               
                 <td>
                     @Html.DisplayFor(modelItem => item.Precio)
                 </td>
@@ -84,19 +64,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Tipo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Estado)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Clinico)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Categoria.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Proveedor.Id)
-                </td>
+                </td>              
+               
+               
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

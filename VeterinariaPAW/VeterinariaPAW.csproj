@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Consultas\" />
     <Folder Include="wwwroot\imagenesproductos\" />
   </ItemGroup>
 
