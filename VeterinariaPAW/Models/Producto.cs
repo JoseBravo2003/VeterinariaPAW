@@ -15,11 +15,13 @@
         public bool? Estado { get; set; }
         public bool? Clinico { get; set; }
 
+        // Propiedad para la URL de la foto
+        public string? FotoUrl { get; set; }
+
         // Relación N:1 con Categoria
         public Categoria? Categoria { get; set; }
 
         // Relación N:1 con Proveedor
         public Proveedor? Proveedor { get; set; }
     }
-
 }

@@ -18,14 +18,14 @@ namespace VeterinariaPAW.Controllers
             _context = context;
         }
 
-        // GET: Productos
+        // GET: Producto
         public async Task<IActionResult> Index()
         {
             var veterinariaContext = _context.Producto.Include(p => p.Categoria).Include(p => p.Proveedor);
             return View(await veterinariaContext.ToListAsync());
         }
 
-        // GET: Productos/Details/5
+        // GET: Producto/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,7 +45,7 @@ namespace VeterinariaPAW.Controllers
             return View(producto);
         }
 
-        // GET: Productos/Create
+        // GET: Producto/Create
         public IActionResult Create()
         {
             ViewData["IdCategoria"] = new SelectList(_context.Categoria, "Id", "Id");
@@ -53,12 +53,12 @@ namespace VeterinariaPAW.Controllers
             return View();
         }
 
-        // POST: Productos/Create
+        // POST: Producto/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion,FechaCaducidad,SKU,IdCategoria,Precio,Stock,IdProveedor,Tipo,Estado,Clinico")] Producto producto)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion,FechaCaducidad,SKU,IdCategoria,Precio,Stock,IdProveedor,Tipo,Estado,Clinico,FotoUrl")] Producto producto)
         {
             if (ModelState.IsValid)
             {
@@ -71,7 +71,7 @@ namespace VeterinariaPAW.Controllers
             return View(producto);
         }
 
-        // GET: Productos/Edit/5
+        // GET: Producto/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,12 +89,12 @@ namespace VeterinariaPAW.Controllers
             return View(producto);
         }
 
-        // POST: Productos/Edit/5
+        // POST: Producto/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,FechaCaducidad,SKU,IdCategoria,Precio,Stock,IdProveedor,Tipo,Estado,Clinico")] Producto producto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,FechaCaducidad,SKU,IdCategoria,Precio,Stock,IdProveedor,Tipo,Estado,Clinico,FotoUrl")] Producto producto)
         {
             if (id != producto.Id)
             {
@@ -126,7 +126,7 @@ namespace VeterinariaPAW.Controllers
             return View(producto);
         }
 
-        // GET: Productos/Delete/5
+        // GET: Producto/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,7 +146,7 @@ namespace VeterinariaPAW.Controllers
             return View(producto);
         }
 
-        // POST: Productos/Delete/5
+        // POST: Producto/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
