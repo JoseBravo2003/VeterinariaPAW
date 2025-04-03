@@ -24,9 +24,34 @@ namespace VeterinariaPAW.Controllers
             var veterinariaContext = _context.Producto.Include(p => p.Categoria).Include(p => p.Proveedor);
             return View(await veterinariaContext.ToListAsync());
         }
+        // GET: Producto
+        public async Task<IActionResult> IndexClientes()
+        {
+            var veterinariaContext = _context.Producto.Include(p => p.Categoria).Include(p => p.Proveedor);
+            return View(await veterinariaContext.ToListAsync());
+        }
 
         // GET: Producto/Details/5
         public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var producto = await _context.Producto
+                .Include(p => p.Categoria)
+                .Include(p => p.Proveedor)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (producto == null)
+            {
+                return NotFound();
+            }
+
+            return View(producto);
+        }
+        // GET: Producto/Details/5
+        public async Task<IActionResult> DetailsClientes(int? id)
         {
             if (id == null)
             {

@@ -1,0 +1,49 @@
+﻿@model VeterinariaPAW.Models.Producto
+
+@{
+    ViewData["Title"] = "Detalles del Producto";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Imagen del Producto -->
+            @if (!string.IsNullOrEmpty(Model.FotoUrl))
+            {
+                <img src="@Model.FotoUrl" alt="Foto del producto" class="img-fluid rounded shadow-sm" style="width: 100%; height: 100%; object-fit: cover;" />
+            }
+            else
+            {
+                <img src="https://via.placeholder.com/450x300" alt="Foto del producto" class="img-fluid rounded shadow-sm" style="width: 100%; height: 100%; object-fit: cover;" />
+            }
+        </div>
+
+        <div class="col-md-6">
+            <!-- Detalles del Producto -->
+            <h2 class="text-primary">@Model.Nombre</h2>
+            <p class="text-muted fs-5">@Model.Descripcion</p>
+
+            <p class="fs-4 text-success">
+                <strong>Descripcion: </strong>@Model.Descripcion.ToString()
+            </p>
+            <p class="fs-4 text-success">
+                <strong>FechaCaducidad: </strong>@Model.FechaCaducidad.ToString()
+            </p>
+            <p class="fs-4 text-success">
+                <strong>Precio: </strong>@Model.Precio.ToString()
+            </p>
+            <p class="fs-4 text-success">
+                <strong>Stock: </strong>@Model.Stock.ToString()
+            </p>
+
+            <div class="mt-4">
+                <!-- Botón para comprar (Simulado o redirigir a una acción) -->
+                <a href="#" class="btn btn-warning btn-lg w-100">Comprar</a>
+            </div>
+
+            <div class="mt-4">
+                <a href="@Url.Action("IndexClientes", "Productos")" class="btn btn-outline-secondary btn-lg w-100">Volver a la lista</a>
+            </div>
+        </div>
+    </div>
+</div>
