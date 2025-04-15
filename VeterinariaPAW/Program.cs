@@ -1,14 +1,13 @@
 using Microsoft.EntityFrameworkCore; // Importar Entity Framework Core
 using VeterinariaPAW.Models;
 using Microsoft.EntityFrameworkCore.Migrations;
+using VeterinariaPAW.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurar el DbContext con la cadena de conexión desde appsettings.json
-builder.Services.AddDbContext<VeterinariaContext>(op =>
-{
-    op.UseSqlServer(builder.Configuration.GetConnectionString("VeterinariaDB"));
-});
+builder.Services.AddDbContext<VeterinariaContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Habilitar el uso de sesiones
 builder.Services.AddDistributedMemoryCache(); // Necesario para almacenar sesiones en memoria
 builder.Services.AddSession(options =>
@@ -17,6 +16,9 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true; // Asegura que la cookie de sesión no sea accesible por scripts
     options.Cookie.IsEssential = true; // Necesario para que funcione en GDPR-compliance
 });
+
+//Agrega la API
+builder.Services.AddHttpClient<GometaApiService>();
 
 // Agregar servicios para controladores y vistas
 builder.Services.AddControllersWithViews();

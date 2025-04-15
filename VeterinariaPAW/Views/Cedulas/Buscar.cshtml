@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Buscar por Cédula";
+}
+
+<h2>Buscar Cédula en GoMeta</h2>
+
+<form method="post" asp-controller="Cedulas" asp-action="Buscar">
+    <div class="form-group">
+        <label for="cedula">Cédula:</label>
+        <input type="text" class="form-control" name="cedula" id="cedula" required />
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+</form>
+

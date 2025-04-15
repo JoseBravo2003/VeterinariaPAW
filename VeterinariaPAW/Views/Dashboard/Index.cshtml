@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Dashboard de Inventario";
+}
+
+<h2 class="mb-4">Dashboard de Inventario</h2>
+
+<div class="row" id="metricas-container"></div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function cargarMetricas() {
+            $.get('/Dashboard/ObtenerMetricas', function (data) {
+                let container = $('#metricas-container');
+                container.empty();
+
+                data.forEach(item => {
+                    container.append(`
+                        <div class="col-md-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">${item.titulo}</h5>
+                                    <h2>${item.valor}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                });
+            });
+        }
+
+        $(document).ready(function () {
+            cargarMetricas();
+            setInterval(cargarMetricas, 5000); // Actualiza cada 5 segundos
+        });
+    </script>
+}

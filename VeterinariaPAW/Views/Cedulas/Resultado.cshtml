@@ -1,0 +1,20 @@
+﻿@model VeterinariaPAW.Models.GometaResponse
+
+@{
+    ViewData["Title"] = "Resultado de Búsqueda";
+}
+
+@if (Model == null)
+{
+    <div class="alert alert-danger">No se encontró información para la cédula.</div>
+}
+else
+{
+    <h3>Resultado:</h3>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Nombre:</strong> @Model.nombre</li>
+        <li class="list-group-item"><strong>Cédula:</strong> @Model.cedula</li>
+
+    </ul>
+}
+
