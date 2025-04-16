@@ -152,5 +152,24 @@ namespace VeterinariaPAW.Controllers
         {
             return _context.Usuario.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> Perfil()
+        {
+            var usuarioIdStr = HttpContext.Session.GetString("UsuarioId");
+
+            if (string.IsNullOrEmpty(usuarioIdStr) || !int.TryParse(usuarioIdStr, out int usuarioId))
+            {
+               return RedirectToAction("InicioSesion", "Acceso");
+            }
+
+            var usuario = await _context.Usuario
+                .FirstOrDefaultAsync(u => u.Id == usuarioId);
+
+            if (usuario == null)
+            {
+                return NotFound("Usuario no encontrado ");
+            }
+            return View(usuario);
+        }
     }
 }
