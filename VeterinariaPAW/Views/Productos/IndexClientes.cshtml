@@ -33,7 +33,8 @@
                     </div>
                     <!-- Boton para Comprar -->
                     <div class="mt-auto text-center">
-                        <button class="btn btn-warning w-100 btn-sm">Comprar</button>
+                        @* <button class="btn btn-warning w-100 btn-sm">Comprar</button> *@
+                        <a asp-controller="Carrito" asp-action="Agregar" asp-route-id="@item.Id" class="btn btn-primary">Agregar al carrito</a>
                     </div>
                 </div>
             </div>
