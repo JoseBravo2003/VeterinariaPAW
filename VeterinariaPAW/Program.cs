@@ -17,6 +17,11 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; // Necesario para que funcione en GDPR-compliance
 });
 
+
+//Visualizar Movimientos
+builder.Services.AddScoped<BitacoraService>();
+
+
 //Agrega la API
 builder.Services.AddHttpClient<GometaApiService>();
 

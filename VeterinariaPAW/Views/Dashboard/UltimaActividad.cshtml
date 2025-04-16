@@ -1,0 +1,32 @@
+﻿@model List<VeterinariaPAW.Models.BitacoraActividad>
+
+@{
+    ViewData["Title"] = "Actividad de Usuarios";
+}
+
+<h2>Últimos movimientos de usuarios</h2>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Acción</th>
+            <th>Controlador</th>
+            <th>Vista</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Usuario</td>
+                <td>@item.Accion</td>
+                <td>@item.Controlador</td>
+                <td>@item.Vista</td>
+                <td>@item.FechaHora.ToString("g")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

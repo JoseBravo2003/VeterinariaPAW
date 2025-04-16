@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VeterinariaPAW.Models;
+using VeterinariaPAW.Services;
 
 namespace VeterinariaPAW.Controllers
 {
     public class ProductosController : Controller
     {
         private readonly VeterinariaContext _context;
+        private readonly BitacoraService _bitacora;
 
-        public ProductosController(VeterinariaContext context)
+        public ProductosController(VeterinariaContext context, BitacoraService bitacora)
         {
             _context = context;
+            _bitacora = bitacora;
         }
 
         // GET: Producto
@@ -23,6 +26,11 @@ namespace VeterinariaPAW.Controllers
         {
             var veterinariaContext = _context.Producto.Include(p => p.Categoria).Include(p => p.Proveedor);
             return View(await veterinariaContext.ToListAsync());
+
+
+            await _bitacora.Registrar(User.Identity?.Name, "Accedió a listado de productos", "Productos", "Index");
+            var productos = _context.Producto.Include(p => p.Categoria).Include(p => p.Proveedor);
+            return View(await productos.ToListAsync());
         }
         // GET: Producto
         public async Task<IActionResult> IndexClientes()

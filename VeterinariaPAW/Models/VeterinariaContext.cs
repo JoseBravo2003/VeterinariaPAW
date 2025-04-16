@@ -11,6 +11,8 @@ namespace VeterinariaPAW.Models
         public DbSet<Categoria> Categoria { get; set; }
         public DbSet<Proveedor> Proveedor { get; set; }
         public DbSet<Producto> Producto { get; set; }
+        public DbSet<BitacoraActividad> BitacoraActividad { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
