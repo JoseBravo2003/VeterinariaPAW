@@ -12,6 +12,7 @@ namespace VeterinariaPAW.Controllers
 
         public DashboardController(VeterinariaContext context)
         {
+            _context = context;
             _service = new DashboardService(context);
         }
 

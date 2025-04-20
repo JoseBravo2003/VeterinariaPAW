@@ -17,10 +17,19 @@
                 <li><a asp-area="" asp-controller="Productos" asp-action="Index">ProductosAdmin</a></li>
                 <li><a asp-area="" asp-controller="Productos" asp-action="IndexClientes">Productos</a></li>
                 <li><a asp-area="" asp-controller="Home" asp-action="Consulta">Consultas</a></li>
-                <li><a asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
-                <li><a asp-area="" asp-controller="Cedulas" asp-action="Buscar">Buscar Cédula</a></li>
                 <a class="nav-link" asp-controller="Usuarios" asp-action="Perfil">Mi Perfil</a>
                 <a asp-controller="Carrito" asp-action="Index">🛒 Carrito</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        Datos
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                        <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="UltimaActividad">Actividad</a></li>
+                        <li><a class="dropdown-item" asp-controller="Cedulas" asp-action="Buscar">Buscar Cédula</a></li>
+                    </ul>
+                </li>
+
 
 
                 <li class="">                   
