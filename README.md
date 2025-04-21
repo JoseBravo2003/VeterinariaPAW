@@ -9,7 +9,7 @@
 ## **Enlace del repositorio**
 - https://github.com/JoseBravo2003/VeterinariaPAW
 
-## **Arquitectura del proyecto **
+## **Arquitectura del proyecto**
 - **API:** Obtener nombre a través de cédula.
 - **Base de datos:** SQL Server.
 
