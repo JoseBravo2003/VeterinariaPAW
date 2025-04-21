@@ -24,6 +24,22 @@ namespace VeterinariaPAW.Controllers
         // GET: Producto
         public async Task<IActionResult> Index()
         {
+
+            // Verificamos si los Toasts ya han sido mostrados
+            if (TempData["ToastsMostrados"] == null)
+            {
+                // Si no se han mostrado, los marcamos como mostrados
+                TempData["ToastsMostrados"] = true;
+
+                // Establecemos que los toasts deben ser mostrados
+                ViewBag.MostrarToasts = true;
+            }
+            else
+            {
+                // Si ya se mostraron los toasts, no los mostramos
+                ViewBag.MostrarToasts = false;
+            }
+
             var veterinariaContext = _context.Producto.Include(p => p.Categoria).Include(p => p.Proveedor);
             return View(await veterinariaContext.ToListAsync());
 
@@ -35,6 +51,8 @@ namespace VeterinariaPAW.Controllers
         // GET: Producto
         public async Task<IActionResult> IndexClientes()
         {
+
+            ViewData["NombreCategoria"] = new SelectList(_context.Categoria, "Id", "Nombre");
             var veterinariaContext = _context.Producto.Include(p => p.Categoria).Include(p => p.Proveedor);
             return View(await veterinariaContext.ToListAsync());
         }
@@ -61,6 +79,8 @@ namespace VeterinariaPAW.Controllers
         // GET: Producto/Details/5
         public async Task<IActionResult> DetailsClientes(int? id)
         {
+
+            ViewData["NombreCategoria"] = new SelectList(_context.Categoria, "Id", "Nombre");
             if (id == null)
             {
                 return NotFound();
@@ -83,6 +103,8 @@ namespace VeterinariaPAW.Controllers
         {
             ViewData["IdCategoria"] = new SelectList(_context.Categoria, "Id", "Id");
             ViewData["IdProveedor"] = new SelectList(_context.Proveedor, "Id", "Id");
+            ViewData["NombreCategoria"] = new SelectList(_context.Categoria, "Id", "Nombre");
+            ViewData["NombreProveedor"] = new SelectList(_context.Proveedor, "Id", "Nombre");
             return View();
         }
 
@@ -93,16 +115,27 @@ namespace VeterinariaPAW.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion,FechaCaducidad,SKU,IdCategoria,Precio,Stock,IdProveedor,Tipo,Estado,Clinico,FotoUrl")] Producto producto)
         {
+
+            if (_context.Producto.Any(p => p.SKU == producto.SKU))
+            {
+                ModelState.AddModelError("SKU", "El SKU ya existe.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(producto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["IdCategoria"] = new SelectList(_context.Categoria, "Id", "Id", producto.IdCategoria);
             ViewData["IdProveedor"] = new SelectList(_context.Proveedor, "Id", "Id", producto.IdProveedor);
+            ViewData["NombreCategoria"] = new SelectList(_context.Categoria, "Id", "Nombre");
+            ViewData["NombreProveedor"] = new SelectList(_context.Proveedor, "Id", "Nombre");
+
             return View(producto);
         }
+
 
         // GET: Producto/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -119,6 +152,8 @@ namespace VeterinariaPAW.Controllers
             }
             ViewData["IdCategoria"] = new SelectList(_context.Categoria, "Id", "Id", producto.IdCategoria);
             ViewData["IdProveedor"] = new SelectList(_context.Proveedor, "Id", "Id", producto.IdProveedor);
+            ViewData["NombreCategoria"] = new SelectList(_context.Categoria, "Id", "Nombre");
+            ViewData["NombreProveedor"] = new SelectList(_context.Proveedor, "Id", "Nombre");
             return View(producto);
         }
 
@@ -132,6 +167,11 @@ namespace VeterinariaPAW.Controllers
             if (id != producto.Id)
             {
                 return NotFound();
+            }
+
+            if (_context.Producto.Any(p => p.SKU == producto.SKU && p.Id != producto.Id))
+            {
+                ModelState.AddModelError("SKU", "El SKU ya existe.");
             }
 
             if (ModelState.IsValid)
@@ -154,10 +194,12 @@ namespace VeterinariaPAW.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["IdCategoria"] = new SelectList(_context.Categoria, "Id", "Id", producto.IdCategoria);
             ViewData["IdProveedor"] = new SelectList(_context.Proveedor, "Id", "Id", producto.IdProveedor);
             return View(producto);
         }
+
 
         // GET: Producto/Delete/5
         public async Task<IActionResult> Delete(int? id)

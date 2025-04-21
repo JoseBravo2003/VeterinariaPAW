@@ -15,12 +15,6 @@
             <div class="col-md-6">
                 <div class="card shadow-lg p-4">
                     <h2 class="text-center mb-4">Iniciar Sesión</h2>
-
-                    @if (TempData["MensajeInicioFallido"] != null)
-                    {
-                        <div class="alert alert-danger">@TempData["MensajeInicioFallido"]</div>
-                    }
-
                     <form asp-action="InicioSesion" method="post">
                         <div class="mb-3">
                             <label asp-for="Correo" class="form-label">Correo Electrónico</label>
@@ -40,3 +34,21 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        @if (TempData["MensajeInicioFallido"] != null)
+        {
+            <text>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de inicio de sesión',
+                        text: '@TempData["MensajeInicioFallido"]',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Intentar de nuevo'
+                    });
+            </text>
+        }
+    </script>
+}

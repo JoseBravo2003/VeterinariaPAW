@@ -1,39 +1,58 @@
 ﻿@model VeterinariaPAW.Models.Categoria
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Categoría";
 }
+<!-- HEADER -->
+<header class="py-5 rounded position-relative" style="background-image: url('https://images.pexels.com/photos/4432260/pexels-photo-4432260.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; overflow: hidden;">
 
-<h1>Edit</h1>
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
 
-<h4>Categoria</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="container px-4 px-lg-5 my-5 position-relative" style="z-index: 2;">
+        <div class="text-center text-white">
+            <h1 class="text-center mb-4 text-white">Editar Categoría</h1>
+        </div>
     </div>
-</div>
+</header>
+<!-- DATOS -->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg p-4">
+                    <h2 class="text-center mb-4">Datos de la Categoría</h2>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="row">
+                            <div class="mb-3">
+                                <label asp-for="Nombre" class="form-label"></label>
+                                <input asp-for="Nombre" class="form-control" />
+                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Descripcion" class="form-label"></label>
+                                <input asp-for="Descripcion" class="form-control" />
+                                <span asp-validation-for="Descripcion" class="text-danger"></span>
+                            </div>
+                        </div>
 
+                        <!-- BOTONES -->
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Guardar Cambios</button>
+                    </form>
+                    <form asp-action="Index" method="get">
+                        <button type="submit" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">Volver</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SCRIPTS -->
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

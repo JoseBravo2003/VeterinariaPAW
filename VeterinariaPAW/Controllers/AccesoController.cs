@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using VeterinariaPAW.Services;
 
 
 namespace VeterinariaPAW.Controllers
@@ -9,10 +10,12 @@ namespace VeterinariaPAW.Controllers
     public class AccesoController : Controller
     {
         private readonly VeterinariaContext _context;
+        private readonly GometaApiService _gometaService;
 
-        public AccesoController(VeterinariaContext context)
+        public AccesoController(VeterinariaContext context, GometaApiService gometaService)
         {
             _context = context;
+            _gometaService = gometaService;
         }
 
         [AllowAnonymous]
@@ -38,10 +41,10 @@ namespace VeterinariaPAW.Controllers
                     HttpContext.Session.SetString("UsuarioRol", usuario.Rol.ToString());
 
                     TempData["Mensaje"] = $"Bienvenido {usuario.NombreUsuario}";
-                    return RedirectToAction("RegistroUsuario", "Acceso");
+                    return RedirectToAction("Perfil", "Usuarios");
                 }
 
-                TempData["MensajeInicioFallido"] = "Correo o contraseña incorrectos.";
+                TempData["MensajeInicioFallido"] = "Correo o contrasena incorrectos.";
                 return RedirectToAction("InicioSesion");
             }
             return View();
@@ -63,7 +66,7 @@ namespace VeterinariaPAW.Controllers
                 // Validar que el usuario no exista previamente
                 if (_context.Usuario.Any(u => u.NombreUsuario == modelo.NombreUsuario || u.Correo == modelo.Correo))
                 {
-                    TempData["MensajeRegistroIncorrecto"] = "El nombre de usuario o correo ya están registrados.";
+                    TempData["MensajeRegistroIncorrecto"] = "El nombre de usuario o correo ya estan registrados.";
                     return View(modelo);
                 }
 
@@ -83,12 +86,30 @@ namespace VeterinariaPAW.Controllers
                 _context.Usuario.Add(nuevoUsuario);
                 _context.SaveChanges();
 
-                TempData["MensajeRegistroCorrecto"] = "Usuario registrado correctamente, ahora puedes iniciar sesión.";
+                TempData["MensajeRegistroCorrecto"] = "Usuario registrado correctamente, ahora puedes iniciar sesion.";
                 return RedirectToAction("RegistroUsuario");
             }
 
             return View(modelo);
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> BuscarNombrePorCedula(string cedula)
+        {
+            if (string.IsNullOrEmpty(cedula))
+                return Json(new { exito = false });
+
+            var resultado = await _gometaService.BuscarCedula(cedula); // Asegúrate de inyectar el servicio
+
+            if (resultado != null)
+            {
+                return Json(new { exito = true, nombre = resultado.nombre });
+            }
+
+            return Json(new { exito = false });
+        }
+
 
         [HttpGet]
         public IActionResult Logout()

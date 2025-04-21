@@ -3,16 +3,41 @@
 @{
     ViewData["Title"] = "Mi Perfil";
 }
+@using Microsoft.AspNetCore.Http
+@{
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var usuarioRol = Context.Session.GetString("UsuarioRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+}
 
-<h2>Mi Perfil</h2>
+<h1 class="mb-5 display-6">Mi Perfil</h1>
 
-<div class="card border rounded p-4 shadow" style="max-width: 600px; margin: auto;">
-    <h4>@Model.NombreCompleto</h4>
-    <p><strong>Usuario:</strong> @Model.NombreUsuario</p>
-    <p><strong>Correo:</strong> @Model.Correo</p>
-    <p><strong>Cédula:</strong> @Model.Cedula</p>
-    <p><strong>Teléfono:</strong> @Model.Telefono</p>
-    <p><strong>Rol:</strong> @Model.Rol</p>
-
-    <a class="btn btn-primary mt-3" asp-action="Edit" asp-route-id="@Model.Id">Editar Perfil</a>
-</div>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <!-- IMAGEN -->
+            <div class="col-md-6">
+                <img class="card-img-top mb-5 mb-md-0 rounded" src="https://images.pexels.com/photos/2446439/pexels-photo-2446439.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="..." />
+            </div>
+            <!-- DATOS -->
+            <div class="col-md-6">
+                <div class="card shadow-lg p-4">
+                    <div class="d-flex justify-content-center m-2">
+                        <img src="/images/perfil.png" alt="Foto del producto" style="width: 80px; height: 80px" class="rounded-circle" />
+                    </div>
+                    <h4 class="text-center">@Model.NombreCompleto</h4>
+                    <p><strong>Usuario:</strong> @Model.NombreUsuario</p>
+                    <p><strong>Correo:</strong> @Model.Correo</p>
+                    <p><strong>Cédula:</strong> @Model.Cedula</p>
+                    <p><strong>Teléfono:</strong> @Model.Telefono</p>
+                    @if (usuarioRol == "Administrador" || usuarioRol == "Empleado")
+                    {
+                        <p><strong>Rol:</strong> @Model.Rol</p>
+                    }
+                    <!-- BOTONES -->
+                    <a class="btn btn-primary mt-3" asp-action="EditUsuario" asp-route-id="@Model.Id"><i class="bi bi-pencil-square me-1"></i> Editar Perfil</a>
+                </div>
+                </div>
+            </div>
+        </div>
+</section>

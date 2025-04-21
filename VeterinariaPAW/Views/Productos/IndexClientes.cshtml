@@ -1,43 +1,128 @@
 ﻿@model IEnumerable<VeterinariaPAW.Models.Producto>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Productos";
 }
 
-<h1 class="text-center mb-4">Productos</h1>
+@using Microsoft.AspNetCore.Http
+@{
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var usuarioRol = Context.Session.GetString("UsuarioRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
+}
 
-<div class="row row-cols-1 row-cols-md-3 g-3">
-    @foreach (var item in Model)
-    {
-        <div class="col">
-            <div class="card shadow-sm border-light rounded-3 h-100">
-                @if (!string.IsNullOrEmpty(item.FotoUrl))
-                {
-                    <img src="@item.FotoUrl" alt="Foto del producto" class="card-img-top" style="width: 450px; height: 300px; object-fit: cover;" />
-                }
-                else
-                {
-                    <img src="https://via.placeholder.com/450x300" alt="Foto del producto" class="card-img-top" style="width: 450px; height: 300px; object-fit: cover;" />
-                }
+<h1 class="mb-5 display-6">Catálogo de Productos</h1>
 
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-center text-primary fs-5">@item.Nombre</h5>
-                    <p class="card-text text-muted fs-6">@item.Descripcion</p>
-                    <p class="card-text text-success fs-6"><strong>Precio: </strong>@item.Precio.ToString()</p>
+<!-- BUSQUEDA -->
+<div class="mb-4">
+    <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre o tipo">
+</div>
 
-                    <!-- Boton para Detalles -->
-                    <div class="mt-auto text-center">
-                        <a href="@Url.Action("DetailsClientes", "Productos", new { id = item.Id })" class="btn btn-warning w-100 btn-sm">
-                            Ver Detalles
-                        </a>
+<!-- CARDS-->
+<div class="container">
+    <div id="productosContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        @foreach (var item in Model.Where(p => p.Stock >= 1))
+        {
+            <div class="col producto-card"
+            data-nombre="@item.Nombre.ToLower()"
+            data-tipo="@item.Tipo.ToLower()">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="ratio ratio-4x3">
+                        <img src="@(!string.IsNullOrEmpty(item.FotoUrl) ? item.FotoUrl : "https://via.placeholder.com/450x300")"
+                        alt="Foto del producto"
+                        class="img-fluid object-fit-cover w-100 h-100" />
                     </div>
-                    <!-- Boton para Comprar -->
-                    <div class="mt-auto text-center">
-                        @* <button class="btn btn-warning w-100 btn-sm">Comprar</button> *@
-                        <a asp-controller="Carrito" asp-action="Agregar" asp-route-id="@item.Id" class="btn btn-primary">Agregar al carrito</a>
+
+                    <div class="card-body d-flex flex-column p-4">
+                        <h5 class="card-title text-center text-dark fw-semibold">@item.Nombre</h5>
+                        <p class="card-text text-muted fw-semibold mb-2"> @item.Categoria?.Nombre - @item.Tipo</p>
+                        <p class="card-text text-muted fw-semibold mb-2">₡@item.Precio</p>
+                        
+                            <!-- BOTONES -->
+                        <div class="mt-auto">
+                            @if (sesionActiva)
+                            {
+                                <a asp-controller="Carrito" asp-action="Agregar" asp-route-id="@item.Id" class="btn btn-primary w-100 btn-agregar">
+                                    <i class="bi bi-cart-plus me-2"></i> Agregar al carrito
+                                </a>
+                            }
+                            
+                                <a href="@Url.Action("DetailsClientes", "Productos", new { id = item.Id })" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">
+                                    <i class="fa fa-info-circle me-2"></i>Ver Detalles
+                                </a>
+                            
+                            </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
+
+<!-- SCRIPTS -->
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const botones = document.querySelectorAll('.btn-agregar');
+
+            botones.forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('href');
+
+                    Swal.fire({
+                        title: '¿Agregar al carrito?',
+                        text: '¿Deseas agregar este producto al carrito?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, agregar',
+                        cancelButtonText: 'No'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+            });
+
+            // Buscar productos
+            const searchInput = document.getElementById('searchInput');
+            const cards = document.querySelectorAll('.producto-card');
+            let sinResultadosMostrada = false;
+
+            searchInput.addEventListener('keyup', function () {
+                const value = this.value.toLowerCase();
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    const nombre = card.dataset.nombre.toLowerCase();
+                    const tipo = card.dataset.tipo.toLowerCase();
+
+                    if (nombre.includes(value) || tipo.includes(value)) {
+                        card.classList.remove('d-none');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('d-none');
+                    }
+                });
+
+                if (value !== "" && visibleCount === 0 && !sinResultadosMostrada) {
+                    sinResultadosMostrada = true;
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Sin resultados',
+                        text: 'No se encontraron productos que coincidan con tu búsqueda.',
+                        confirmButtonColor: '#3085d6'
+                    }).then(() => {
+                        sinResultadosMostrada = false;
+                    });
+                }
+            });
+        });
+    </script>
+}

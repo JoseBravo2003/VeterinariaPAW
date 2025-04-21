@@ -115,6 +115,47 @@ namespace VeterinariaPAW.Controllers
             return View(usuario);
         }
 
+        public async Task<IActionResult> EditUsuario(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var usuario = await _context.Usuario.FindAsync(id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+            return View(usuario);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditUsuario(Usuario model)
+        {
+            var usuarioDb = _context.Usuario.FirstOrDefault(u => u.Id == model.Id);
+
+            if (usuarioDb != null)
+            {
+                usuarioDb.NombreUsuario = model.NombreUsuario;
+                usuarioDb.NombreCompleto = model.NombreCompleto;
+                usuarioDb.Correo = model.Correo;
+                usuarioDb.Cedula = model.Cedula;
+                usuarioDb.Telefono = model.Telefono;
+
+                if (!string.IsNullOrWhiteSpace(model.Contraseña))
+                {
+                    usuarioDb.Contraseña = model.Contraseña;
+                }
+
+                _context.SaveChanges();
+                return RedirectToAction("Perfil");
+            }
+
+            return View(model);
+        }
+
+
         // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

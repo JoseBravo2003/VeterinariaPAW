@@ -2,13 +2,19 @@
     ViewData["Title"] = "Consultas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<!-- HEADER -->
+<header class="py-5 rounded position-relative" style="background-image: url('https://images.pexels.com/photos/160846/french-bulldog-summer-smile-joy-160846.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; overflow: hidden;">
 
-<body>
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
 
-    <div class="text-center">
-        <h1 class="display-4">Consultas PAW</h1>
-        <p class="lead text-muted">Informacion disponible</p>
+    <div class="container px-4 px-lg-5 my-5 position-relative" style="z-index: 2;">
+        <div class="text-center text-white">
+            <h1 class="display-4 text-white">Consultas PAW</h1>
+                <p class="lead text-white">Informacion disponible</p>
+        </div>
     </div>
+</header>
+<body>
 
     <!-- Seccion de informacion -->
     <section class="buy_section layout_padding" style="background-color: #f9f9f9; padding: 60px 0; text-align: center;">
@@ -17,10 +23,13 @@
                 Visita nuestra tienda en línea y adquiere nuestros servicios de manera fácil y rápida.
             </h2>
             <p style="font-size: 1.2rem; color: #777; margin-bottom: 40px;">
-                Te invitamos a ingresar a nuestra tienda en línea, donde podrás acceder a todos nuestros productos y servicios de forma cómoda y segura, ¡todo al alcance de un clic
+                Te invitamos a ingresar a nuestra tienda en línea, donde podrás acceder a todos nuestros productos, de forma cómoda y segura
+            </p>
+            <p>
+               ¡Todo al alcance de un click!
             </p>
             <div>
-                <a href="@Url.Action("Index", "Productos")" class="btn btn-primary" style="background-color: #2DB2B5; padding: 15px 30px; font-size: 1.1rem;">
+                <a href="@Url.Action("InicioSesion", "Acceso")" class="btn btn-primary" style="background-color: #2DB2B5; padding: 15px 30px; font-size: 1.1rem;">
                     Compra ahora!
                 </a>
             </div>
@@ -46,6 +55,9 @@
                                 <p class="mb-4" style="font-size: 1.2rem; color: #555; font-style: italic;">
                                     "Este es el mejor servicio que he usado. ¡Me ha simplificado muchísimo la vida!"
                                 </p>
+                                <div class="d-flex justify-content-center m-2">
+                                    <img src="/images/perfil.png" alt="Foto del producto" style="width: 100px; height: 100px" class="rounded-circle" />
+                                </div>
                                 <h4 style="font-size: 1.4rem; color: #2DB2B5;">Jose </h4>
                                 <span style="font-size: 1.1rem; color: #777;">Cliente</span>
                             </div>
@@ -58,6 +70,9 @@
                                 <p class="mb-4" style="font-size: 1.2rem; color: #555; font-style: italic;">
                                     "No podria estar mas feliz con la facilidad de compra que cuenta la veteria PAW"
                                 </p>
+                                <div class="d-flex justify-content-center m-2">
+                                    <img src="/images/perfil.png" alt="Foto del producto" style="width: 100px; height: 100px" class="rounded-circle" />
+                                </div>
                                 <h4 style="font-size: 1.4rem; color: #2DB2B5;">Rober </h4>
                                 <span style="font-size: 1.1rem; color: #777;">Cliente</span>
                             </div>
@@ -70,6 +85,9 @@
                                 <p class="mb-4" style="font-size: 1.2rem; color: #555; font-style: italic;">
                                     "Una solución confiable e innovadora que superó mis expectativas. ¡La recomiendo ampliamente!"
                                 </p>
+                                <div class="d-flex justify-content-center m-2">
+                                    <img src="/images/perfil.png" alt="Foto del producto" style="width: 100px; height: 100px" class="rounded-circle" />
+                                </div>
                                 <h4 style="font-size: 1.4rem; color: #2DB2B5;">Luisa</h4>
                                 <span style="font-size: 1.1rem; color: #777;">Cliente</span>
                             </div>

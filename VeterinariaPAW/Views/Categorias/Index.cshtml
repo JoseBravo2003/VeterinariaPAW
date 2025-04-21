@@ -1,41 +1,89 @@
 ﻿@model IEnumerable<VeterinariaPAW.Models.Categoria>
 
 @{
-    ViewData["Title"] = "Categoria";
+    ViewData["Title"] = "Categorías";
+}
+@using Microsoft.AspNetCore.Http
+@{
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var usuarioRol = Context.Session.GetString("UsuarioRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
 }
 
-<h1>Categoria</h1>
+<h1>Categorías</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+<!-- BOTONES -->
+@if (usuarioRol == "Administrador")
+{
+
+    <p>
+        <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-lg m-1"></i>Crear Nueva</a>
+    </p>
+}
+
+<!-- CAMPO DE BÚSQUEDA -->
+<div class="mb-3">
+    <label for="searchInput" class="form-label">Buscar</label>
+    <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre">
+</div>
+
+<!-- TABLA -->
+<table id="tablaCategorias" class="table align-middle mb-0 bg-white table-striped">
+    <thead class="bg-light">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th></th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nombre</td>
+                <td>@item.Descripcion</td>
+                <td>
+                    <!-- BOTONES -->
+                    @if (usuarioRol == "Administrador")
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" title="Editar">
+                            <i class="bi bi-pencil m-1"></i>
+                        </a>
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id" title="Detalles">
+                        <i class="bi bi-eye m-1"></i>
+                    </a>
+                    @if (usuarioRol == "Administrador")
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar">
+                            <i class="bi bi-trash m-1"></i>
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<!-- SCRIPTS -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const table = $('#tablaCategorias').DataTable({
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+                },
+                responsive: true,
+                paging: true,
+                info: false,
+                searching: true,
+                ordering: true,
+                dom: 'tp'
+            });
+
+            $('#searchInput').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+    </script>
+}

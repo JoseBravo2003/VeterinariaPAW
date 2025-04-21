@@ -3,47 +3,86 @@
 @{
     ViewData["Title"] = "Detalles del Producto";
 }
+@{
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var usuarioRol = Context.Session.GetString("UsuarioRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
+}
 
 <div class="container mt-5">
-    <div class="row">
+    <div class="row g-5">
+        <!-- IMAGEN -->
         <div class="col-md-6">
-            <!-- Imagen del Producto -->
-            @if (!string.IsNullOrEmpty(Model.FotoUrl))
-            {
-                <img src="@Model.FotoUrl" alt="Foto del producto" class="img-fluid rounded shadow-sm" style="width: 100%; height: 100%; object-fit: cover;" />
-            }
-            else
-            {
-                <img src="https://via.placeholder.com/450x300" alt="Foto del producto" class="img-fluid rounded shadow-sm" style="width: 100%; height: 100%; object-fit: cover;" />
-            }
+            <div class="rounded-4 overflow-hidden shadow-sm">
+                <img src="@(!string.IsNullOrEmpty(Model.FotoUrl) ? Model.FotoUrl : "https://via.placeholder.com/600x400")"
+                     alt="Foto del producto"
+                     class="img-fluid w-100 object-fit-cover"
+                     style="height: 400px;" />
+            </div>
         </div>
 
+        <!-- DATOS -->
         <div class="col-md-6">
-            <!-- Detalles del Producto -->
-            <h2 class="text-primary">@Model.Nombre</h2>
-            <p class="text-muted fs-5">@Model.Descripcion</p>
+            <p class="card-text text-muted small mb-4">@Model.SKU</p>
+            <h2 class="text-center text-dark fw-semibold">@Model.Nombre</h2>
 
-            <p class="fs-4 text-success">
-                <strong>Descripcion: </strong>@Model.Descripcion.ToString()
-            </p>
-            <p class="fs-4 text-success">
-                <strong>FechaCaducidad: </strong>@Model.FechaCaducidad.ToString()
-            </p>
-            <p class="fs-4 text-success">
-                <strong>Precio: </strong>@Model.Precio.ToString()
-            </p>
-            <p class="fs-4 text-success">
-                <strong>Stock: </strong>@Model.Stock.ToString()
-            </p>
+            <p class="card-text text-center small mb-4">@Model.Descripcion</p>
 
-            <div class="mt-4">
-                <!-- Botón para comprar (Simulado o redirigir a una acción) -->
-                <a href="#" class="btn btn-warning btn-lg w-100">Comprar</a>
+            <div class="mb-3">
+                <p class="mb-2"><strong class="text-dark">Fecha de Caducidad:</strong> <span>@Model.FechaCaducidad.ToShortDateString()</span></p>
+                <p class="mb-2"><strong class="text-dark">Precio:</strong> <span>₡@Model.Precio</span></p>
+                <p class="mb-2"><strong class="text-dark">Categoría:</strong> <span>@Model.Categoria?.Nombre</span></p>
+                <p class="mb-2"><strong class="text-dark">Tipo:</strong> <span>@Model.Tipo</span></p>
+                
             </div>
 
-            <div class="mt-4">
-                <a href="@Url.Action("IndexClientes", "Productos")" class="btn btn-outline-secondary btn-lg w-100">Volver a la lista</a>
+            <!-- BOTONES -->
+            <div class="d-grid gap-3 mt-4">
+                @if (sesionActiva)
+                {
+                    <a asp-controller="Carrito" asp-action="Agregar" asp-route-id="@Model.Id"
+                       class="btn btn-primary btn-lg rounded-pill btn-agregar">
+                        <i class="bi bi-cart-plus me-2"></i> Agregar al carrito
+                    </a>
+                }
+
+                <a href="@Url.Action("IndexClientes", "Productos")"
+                   class="btn btn-outline-secondary btn-lg rounded-pill">
+                    <i class="bi bi-arrow-left-circle me-2"></i> Volver al catálogo
+                </a>
             </div>
         </div>
     </div>
 </div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const botones = document.querySelectorAll('.btn-agregar');
+
+        botones.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const url = this.getAttribute('href');
+
+                Swal.fire({
+                    title: '¿Agregar al carrito?',
+                    text: '¿Deseas agregar este producto al carrito?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, agregar',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    });
+</script>

@@ -17,7 +17,7 @@ namespace VeterinariaPAW.Services
             var stockBajo = _context.Producto.Count(p => p.Stock < 10);
             var categoriasUnicas = _context.Producto.Select(p => p.IdCategoria).Distinct().Count();
             var clinicos = _context.Producto.Count(p => p.Clinico == true);
-            var vencidos = _context.Producto.Count(p => p.FechaCaducidad < DateTime.Today);
+            var vencidos = _context.Producto.Count(p => p.FechaCaducidad <= DateTime.Now);
 
             return new List<DashboardMetricDTO>
             {

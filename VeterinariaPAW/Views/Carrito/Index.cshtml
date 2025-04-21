@@ -4,64 +4,181 @@
     ViewData["Title"] = "Carrito de Compras";
 }
 
-<h2>Carrito de Compras</h2>
+<!-- HEADER -->
+<header class="py-5 rounded position-relative" style="background-image: url('https://images.pexels.com/photos/96938/pexels-photo-96938.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; overflow: hidden;">
 
-@if (!Model.Any())
-{
-    <p>El carrito está vacío.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td><img src="@item.Producto.FotoUrl" width="50" /></td>
-                    <td>@item.Producto.Nombre</td>
-                    <td>@item.Producto.Precio</td>
-                    <td>@item.cantidad</td>
-                    <td>
-                        <form asp-controller="Carrito" asp-action="Comprar" method="post">
-                            <input type="hidden" name="productoId" value="@item.Producto.Id" />
-                            <button type="submit" class="btn btn-success btn-sm">Comprar</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
 
-    <div class="mt-3">
-        <a asp-action="Vaciar" class="btn btn-warning">Vaciar Carrito</a>
+    <div class="container px-4 px-lg-5 my-5 position-relative" style="z-index: 2;">
+        <div class="text-center text-white">
+            <h1 class="display-4 text-white">Carrito de Compras</h1>
+        </div>
     </div>
+</header>
 
+<!-- DATOS -->
+<body>
 
+    @if (!Model.Any())
+    {
+        <div class="text-center">
+            <div class="d-flex justify-content-center m-5">
+                <img src="/images/carro-vacio.png" alt="Foto del producto" style="width: 120px; height: 120px" />
+            </div>
+            <h5 class="display-4">El carrito está vacío</h5>
+            <p class="lead text-muted">Aún no se ha seleccionado algún producto</p>
+        </div>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Precio Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaCarrito">
+                @foreach (var item in Model)
+                {
+                    <tr data-producto-id="@item.Producto.Id">
+                        <td><img src="@item.Producto.FotoUrl" width="50" /></td>
+                        <td>@item.Producto.Nombre</td>
+                        <td>
+                            <input type="number"
+                                   class="form-control form-control-sm cantidad"
+                                   value="@item.cantidad"
+                                   min="1"
+                                   max="@item.Producto.Stock"
+                                   data-precio="@item.Producto.Precio"
+                                   data-stock="@item.Producto.Stock" />
+                        </td>
+                        <td class="precio-total">
+                            @{
+                                var precio = Convert.ToDecimal(item.Producto.Precio);
+                                var total = precio * item.cantidad;
+                            }
+                            @total.ToString("0.00")
+                        </td>
+                        <td>
+                            <!-- BOTONES -->
+                            <button class="btn btn-primary btn-sm" style="background-color:#BB2D3B" onclick="eliminarProducto(@item.Producto.Id)"><i class="bi bi-trash m-1"></i>Eliminar</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+            <h3>Total: <span id="total">0</span></h3>
+        </div>
 
-}
+        <!-- BOTONES -->
+        <div class="row align-items-center">
+            <button class="btn btn-primary" onclick="comprarTodo()"><i class="bi bi-cart me-2"></i>Comprar Todo</button>
+            <button class="btn btn-outline-secondary mt-3 rounded-pill" onclick="vaciarTodo()"><i class="bi bi-x-circle me-2"></i>Vaciar Carrito</button>
+        </div>
+    }
+</body>
+
+<!-- SCRIPTS -->
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        @if (TempData["CompraExitosa"] != null)
-        {
-            <text>
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Compra realizada!',
-                    text: "Gracias por confiar en nosotros",
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Aceptar'
-                });
-            </text>
+        document.querySelectorAll('.cantidad').forEach(input => {
+            input.addEventListener('input', function () {
+                let cantidad = parseInt(this.value);
+                let precio = parseFloat(this.dataset.precio);
+                let stock = parseInt(this.dataset.stock);
+                let row = this.closest('tr');
+
+                if (cantidad > stock) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Cantidad inválida',
+                        text: `Solo hay ${stock} unidades disponibles en stock.`,
+                    });
+                    this.value = stock;
+                    cantidad = stock;
+                }
+
+                let precioTotal = cantidad * precio;
+                row.querySelector('.precio-total').textContent = precioTotal.toFixed(2);
+                actualizarTotal();
+                actualizarCarrito(row.dataset.productoId, cantidad);
+            });
+        });
+
+        function actualizarTotal() {
+            let total = 0;
+            document.querySelectorAll('.precio-total').forEach(cell => {
+                total += parseFloat(cell.textContent);
+            });
+            document.getElementById('total').textContent = total.toFixed(2);
         }
+
+        function actualizarCarrito(productoId, cantidad) {
+            fetch(`/Carrito/ActualizarCantidad?productoId=${productoId}&cantidad=${cantidad}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Aquí puedes manejar la respuesta si es necesario
+            });
+        }
+
+        function eliminarProducto(productoId) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "No podrás recuperar este producto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, eliminarlo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/Carrito/Eliminar/' + productoId;
+                }
+            });
+        }
+
+        function comprarTodo() {
+            Swal.fire({
+                title: '¿Estás seguro de comprar todo?',
+                text: "Se procesará el pago de todos los productos del carrito.",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, comprar todo'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/Carrito/ComprarTodo';
+                }
+            });
+        }
+        function vaciarTodo() {
+            Swal.fire({
+                title: '¿Estás seguro de vaciar todo el carrito?',
+                text: "No podrás recuperar este carrito!",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, eliminarlo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/Carrito/Vaciar';
+                }
+            });
+        }
+
+        actualizarTotal();
     </script>
 }
-

@@ -1,71 +1,76 @@
 ﻿@model IEnumerable<VeterinariaPAW.Models.Usuario>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Usuarios";
 }
 
-<h1>Index</h1>
+<h1>Usuarios</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+<!-- BUSQUEDA -->
+<div class="mb-3">
+    <label for="searchInput" class="form-label">Buscar</label>
+    <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre completo, correo o cédula">
+</div>
+
+<!-- TABLA -->
+<table id="tablaUsuarios" class="table align-middle mb-0 bg-white table-striped">
+    <thead class="bg-light">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreUsuario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreCompleto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Correo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cedula)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Telefono)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Contraseña)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rol)
-            </th>
-            <th></th>
+            <th>Usuario</th>
+            <th>Nombre completo</th>
+            <th>Correo</th>
+            <th>Cédula</th>
+            <th>Teléfono</th>
+            <th>Rol</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreUsuario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreCompleto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Correo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cedula)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Contraseña)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rol)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NombreUsuario</td>
+                <td>@item.NombreCompleto</td>
+                <td>@item.Correo</td>
+                <td>@item.Cedula</td>
+                <td>@item.Telefono</td>
+                <td>@item.Rol</td>
+                <td>
+                    <!-- BOTONES -->
+                    <a asp-action="Edit" asp-route-id="@item.Id" title="Editar">
+                        <i class="bi bi-pencil m-1"></i>
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.Id" title="Detalles">
+                        <i class="bi bi-eye m-1"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar">
+                        <i class="bi bi-trash m-1"></i>
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<!-- SCRIPTS -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const table = $('#tablaUsuarios').DataTable({
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+                },
+                responsive: true,
+                paging: true,
+                info: false,
+                searching: true,
+                ordering: true,
+                dom: 'tp'
+            });
+
+            $('#searchInput').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+    </script>
+}

@@ -1,4 +1,11 @@
-﻿
+﻿@using Microsoft.AspNetCore.Http
+@{
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var usuarioRol = Context.Session.GetString("UsuarioRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
+}
+
 <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
         <a asp-action="Index" asp-controller="Home" class="logo d-flex align-items-center me-auto">        
@@ -6,47 +13,96 @@
         </a>
         <nav id="navmenu" class="navmenu">               
             <ul>
-                <li><a class="active" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a></li>
+                <li><a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-house-door me-1"></i> Inicio</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="Consulta"><i class="bi bi-chat-dots me-1"></i> Consultas</a></li>
+                <li><a asp-area="" asp-controller="Productos" asp-action="IndexClientes"><i class="bi bi-basket me-1"></i> Productos</a></li>
 
 
 
-                
-                <li><a asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a></li>
-                <li><a asp-area="" asp-controller="Proveedores" asp-action="Index">Proveedores</a></li>
-                <li><a asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a></li>
-                <li><a asp-area="" asp-controller="Productos" asp-action="Index">ProductosAdmin</a></li>
-                <li><a asp-area="" asp-controller="Productos" asp-action="IndexClientes">Productos</a></li>
-                <li><a asp-area="" asp-controller="Home" asp-action="Consulta">Consultas</a></li>
-                <a class="nav-link" asp-controller="Usuarios" asp-action="Perfil">Mi Perfil</a>
-                <a asp-controller="Carrito" asp-action="Index">🛒 Carrito</a>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                        Datos
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
-                        <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="UltimaActividad">Actividad</a></li>
-                        <li><a class="dropdown-item" asp-controller="Cedulas" asp-action="Buscar">Buscar Cédula</a></li>
-                    </ul>
-                </li>
+                @if (sesionActiva)
+                {
+                    @if (usuarioRol == "Administrador")
+                    {
+                        <a class="nav-link" asp-controller="Usuarios" asp-action="Perfil"><i class="bi bi-person-circle me-1"></i> Mi Perfil</a>
+                        <a asp-controller="Carrito" asp-action="Index"><i class="bi bi-cart4 me-1"></i> Carrito</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear-fill me-2"></i> Administración
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a asp-area="" asp-controller="Productos" asp-action="Index">Productos Administrador</a></li>
+                                <li><a asp-area="" asp-controller="Proveedores" asp-action="Index">Proveedores</a></li>
+                                <li><a asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-info-circle me-2"></i> Datos
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a></li>
+                                <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                                <li><a class="dropdown-item" asp-controller="Cedulas" asp-action="Buscar">Buscar Cédula</a></li>
+                            </ul>
+                        </li>
+                        <li class="">
+                            <form asp-area="" asp-controller="Acceso" asp-action="Logout" method="get">
+                                <button type="submit" class="btn btn-xs btn-outline-primary p-2">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                    }
+                    else if (usuarioRol == "Empleado")
+                    {
+                        <a class="nav-link" asp-controller="Usuarios" asp-action="Perfil"><i class="bi bi-person-circle me-1"></i> Mi Perfil</a>
+                        <a asp-controller="Carrito" asp-action="Index"><i class="bi bi-cart4 me-1"></i> Carrito</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-info-circle me-2"></i> Datos
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                                <li><a asp-area="" asp-controller="Productos" asp-action="Index">Productos Empleado</a></li>
+                                <li><a asp-area="" asp-controller="Proveedores" asp-action="Index">Proveedores</a></li>
+                                <li><a asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a></li>
+                            </ul>
 
-
-
-                <li class="">                   
-                    <a href="@Url.Action("Logout", "Acceso")" class="">Cerrar Sesión</a>
-                </li>
-                <li class="pe-2">
-                    <form asp-area="" asp-controller="Acceso" asp-action="InicioSesion" method="get">
-                        <button type="submit" class="btn btn-xs btn-primary p-2">Iniciar Sesión</button>
-                    </form>
-                </li>
-                <li>
-                    <form asp-area="" asp-controller="Acceso" asp-action="RegistroUsuario" method="get">
-                        <button type="submit" class="btn btn-xs btn-outline-primary p-2">Registrarse</button>
-                    </form>
-                </li>
-
-                
+                        </li>
+                        <li class="">
+                            <form asp-area="" asp-controller="Acceso" asp-action="Logout" method="get">
+                                <button type="submit" class="btn btn-xs btn-outline-primary p-2">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                    }
+                    else if (usuarioRol == "Usuario")
+                    {
+                        <li><a asp-controller="Usuarios" asp-action="Perfil"><i class="bi bi-person-circle me-1"></i> Mi Perfil</a></li>
+                        <li><a asp-controller="Carrito" asp-action="Index"><i class="bi bi-cart4 me-1"></i> Carrito </a></li>
+                        <li class="">
+                            <form asp-area="" asp-controller="Acceso" asp-action="Logout" method="get">
+                                <button type="submit" class="btn btn-xs btn-outline-primary p-2">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="pe-2">
+                        <form asp-area="" asp-controller="Acceso" asp-action="InicioSesion" method="get">
+                            <button type="submit" class="btn btn-xs btn-primary p-2"><i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión</button>
+                        </form>
+                    </li>
+                    <li>
+                        <form asp-area="" asp-controller="Acceso" asp-action="RegistroUsuario" method="get">
+                            <button type="submit" class="btn btn-xs btn-outline-primary p-2"><i class="bi bi-person-plus me-1"></i> Registrarse</button>
+                        </form>
+                    </li>
+                }
             </ul>   
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>

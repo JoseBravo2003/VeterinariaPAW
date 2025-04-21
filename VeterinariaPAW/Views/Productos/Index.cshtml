@@ -1,120 +1,287 @@
 ﻿@model IEnumerable<VeterinariaPAW.Models.Producto>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Productos";
+}
+@using Microsoft.AspNetCore.Http
+@{
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var usuarioRol = Context.Session.GetString("UsuarioRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
 }
 
 <h1>Productos</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<!-- Notificación de stock bajo -->
-@if (Model.Any(p => p.Stock < 10))
+<!-- BOTONES -->
+@if (usuarioRol == "Administrador")
 {
-    <div class="alert alert-warning">
-        <strong>Atención:</strong> Algunos productos tienen menos de 10 unidades en stock.
+    <p>
+        <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-lg m-1"></i>Crear Nuevo</a>
+    </p>
+}
+
+<!-- TOASTS -->
+@if (ViewBag.MostrarToasts == true)
+{
+    <div class="toast-container position-absolute top-0 end-0 p-3">
+        @foreach (var item in Model)
+        {
+            var diasParaCaducar = (item.FechaCaducidad - DateTime.Now).TotalDays;
+
+            if (item.FechaCaducidad <= DateTime.Now)
+            {
+                <div class="toast bg-ligth text-dark" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-danger text-white">
+                        <strong class="me-auto">Producto caducado</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        <strong>@item.Nombre</strong> (SKU: @item.SKU) ha caducado.
+                    </div>
+                </div>
+
+            }
+            else if (diasParaCaducar <= 5)
+            {
+
+                <div class="toast bg-ligth text-dark" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-warning text-white">
+                        <strong class="me-auto">Próximo a caducar</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        <strong>@item.Nombre</strong> (SKU: @item.SKU) caduca en menos de 5 días.
+                    </div>
+                </div>
+            }
+
+            if (item.Stock < 10)
+            {
+                <div class="toast bg-ligth text-dark" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-info text-white">
+                        <strong class="me-auto">Stock bajo</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        <strong>@item.Nombre</strong> (SKU: @item.SKU) caduca en menos de 5 días.
+                    </div>
+                </div>
+            }
+        }
     </div>
 }
+<div class="mb-3">
+    <label for="searchInput" class="form-label">Buscar</label>
+    <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre o SKU">
+</div>
+<!-- FILTROS -->
+<div class="row mb-3">
+    <div class="col-md-3">
+        <label for="tipoFiltro" class="form-label">Tipo</label>
+        <select id="tipoFiltro" class="form-select form-select-sm filter-select" data-column="6">
+            <option value="">Todos</option>
+            @foreach (var tipo in Model.Select(p => p.Tipo).Distinct().OrderBy(t => t))
+            {
+                <option value="@tipo">@tipo</option>
+            }
+        </select>
+    </div>
 
-<table class="table">
-    <thead>
+    <div class="col-md-3">
+        <label for="estadoFiltro" class="form-label">Estado</label>
+        <select id="estadoFiltro" class="form-select form-select-sm filter-select" data-column="7">
+            <option value="">Todos</option>
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label for="clinicoFiltro" class="form-label">Clínico</label>
+        <select id="clinicoFiltro" class="form-select form-select-sm filter-select" data-column="8">
+            <option value="">Todos</option>
+            <option value="true">Si</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label for="categoriaFiltro" class="form-label">Categoría</label>
+        <select id="categoriaFiltro" class="form-select form-select-sm filter-select" data-column="9">
+            <option value="">Todas</option>
+            @foreach (var cat in Model.Select(p => p.Categoria?.Nombre).Distinct())
+            {
+                if (!string.IsNullOrEmpty(cat))
+                {
+                    <option value="@cat">@cat</option>
+                }
+            }
+        </select>
+    </div>
+</div>
+
+
+<!-- TABLA DE PRODUCTOS -->
+<table id="tablaProductos" class="table align-middle mb-0 bg-white table-striped">
+    <thead class="bg-light">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaCaducidad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SKU)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Precio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stock)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tipo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Clinico)
-            </th>
-            <th>
-                Foto
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Categoria)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Proveedor)
-            </th>
-            <th></th>
+            <th>Foto</th>
+            <th>Nombre</th>
+            <th>Fecha Caducidad</th>
+            <th>SKU</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Clínico</th>
+            <th>Categoría</th>
+            <th>Proveedor</th>
+            <th>Acciones</th>
         </tr>
     </thead>
+
     <tbody>
-        @foreach (var item in Model) 
+        @foreach (var item in Model)
         {
-            //Con esta informacion podremos detectar cuales productos tienen menos de 10
-            var rowClass = item.Stock < 10 ? "table-warning" : "";
-            <tr class="@rowClass">
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaCaducidad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SKU)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Precio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tipo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Clinico)
-            </td>
-            <td>
-                @if (!string.IsNullOrEmpty(item.FotoUrl))
-                {
-                    <img src="@item.FotoUrl" alt="Foto del producto" style="width: 100px; height: 100px;" />
-                }
-                else
-                {
-                    <span>No disponible</span>
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categoria.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Proveedor.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+            var diasParaCaducar = (item.FechaCaducidad - DateTime.Now).TotalDays;
+            string fechaClass = "";
+            string stockClass = "";
+
+            if (item.FechaCaducidad <= DateTime.Now)
+            {
+                fechaClass = "table-danger";
+            }
+            else if (diasParaCaducar <= 5)
+            {
+                fechaClass = "table-warning";
+            }
+
+            if (item.Stock < 10)
+            {
+                stockClass = "table-info";
+            }
+
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        @if (!string.IsNullOrEmpty(item.FotoUrl))
+                        {
+                            <img src="@item.FotoUrl" alt="Foto del producto" style="width: 45px; height: 45px" class="rounded-circle" />
+                        }
+                        else
+                        {
+                            <span>No disponible</span>
+                        }
+                    </div>
+                </td>
+                <td>
+                    <p class="fw-bold mb-1">@item.Nombre</p>
+                    <div class="mt-1">
+                        @if (item.FechaCaducidad <= DateTime.Now)
+                        {
+                            <span class="badge bg-danger rounded-pill ms-2">¡Caducado!</span>
+                        }
+                        else if (diasParaCaducar <= 5)
+                        {
+                            <span class="badge bg-warning rounded-pill text-dark ms-2">Por caducar</span>
+                        }
+                        @if (item.Stock < 10)
+                        {
+                            <span class="badge bg-info rounded-pill text-dark ms-2">Stock bajo</span>
+                        }
+                    </div>
+                </td>
+
+                <td class="@fechaClass">@item.FechaCaducidad.ToString("dd/MM/yyyy")</td>
+                <td>@item.SKU</td>
+                <td>₡@item.Precio</td>
+                <td class="@stockClass">@item.Stock</td>
+                <td>@item.Tipo</td>
+
+                <td>
+                    <span class="d-none">@item.Estado</span>
+                    @if (item.Estado == true)
+                    {
+                        <span class="badge bg-success rounded-pill d-inline ms-2">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary rounded-pill d-inline ms-2">Inactivo</span>
+                    }
+                </td>
+
+                <td>
+                    <span class="d-none">@item.Clinico</span>
+                    @if (item.Clinico == true)
+                    {
+                        <span class="badge bg-success rounded-pill d-inline ms-2">Si</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary rounded-pill d-inline ms-2">No</span>
+                    }
+                </td>
+
+                <td>@item.Categoria?.Nombre</td>
+                <td>@item.Proveedor?.Nombre</td>
+                <td>
+                    <!-- BOTONES -->
+                    @if (usuarioRol == "Administrador")
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="bi bi-pencil m-1"></i>
+                        </a>
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <i class="bi bi-eye m-1"></i>
+                    </a>
+                    @if (usuarioRol == "Administrador")
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id">
+                            <i class="bi bi-trash m-1"></i>
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
+
 </table>
+
+
+<!-- SCRIPTS -->
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toastElements = document.querySelectorAll('.toast');
+            toastElements.forEach(toastEl => {
+                const bsToast = new bootstrap.Toast(toastEl, { delay: 5000, autohide: true });
+                bsToast.show();
+            });
+
+            // Declarar table fuera para usarlo en toda la función
+            const table = $('#tablaProductos').DataTable({
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+                },
+                responsive: true,
+                paging: true,
+                info: false,
+                searching: true,
+                ordering: true,
+                dom: 'tp',
+                initComplete: function () {
+                    $('.filter-select').on('change', function () {
+                        table.column($(this).data('column')).search(this.value).draw();
+                    });
+                }
+            });
+
+            // Buscar global con el input al escribir
+            $('#searchInput').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+    </script>
+
+}

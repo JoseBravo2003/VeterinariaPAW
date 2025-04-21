@@ -1,90 +1,39 @@
 ﻿@model VeterinariaPAW.Models.Producto
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles del Producto";
 }
 
-<h1>Details</h1>
+<section class="py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row align-items-center">
+            <!-- IMAGEN -->
+            <div class="col-md-4">
+                <img class="img-fluid rounded" src="@Model.FotoUrl" alt="Imagen del Producto" />
+            </div>
 
-<div>
-    <h4>Producto</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaCaducidad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaCaducidad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SKU)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SKU)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Precio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Precio)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Stock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Stock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Tipo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Tipo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Clinico)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Clinico)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FotoUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FotoUrl)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Categoria)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Categoria.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Proveedor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Proveedor.Id)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+            <!-- DATOS -->
+            <div class="col-md-8">
+                <div class="card shadow-sm p-4">
+                    <h3 class="mb-4">@Model.Nombre</h3>
+
+                    <div class="mb-3"><strong>Descripción:</strong> @Model.Descripcion</div>
+                    <div class="mb-3"><strong>Fecha de Caducidad:</strong> @Model.FechaCaducidad.ToString("dd/MM/yyyy")</div>
+                    <div class="mb-3"><strong>SKU:</strong> @Model.SKU</div>
+                    <div class="mb-3"><strong>Precio:</strong> ₡@Model.Precio</div>
+                    <div class="mb-3"><strong>Stock:</strong> @Model.Stock unidades</div>
+                    <div class="mb-3"><strong>Tipo:</strong> @Model.Tipo</div>
+                    <div class="mb-3"><strong>Estado:</strong> @((Model.Estado ?? false) ? "Activo" : "Desactivado")</div>
+                    <div class="mb-3"><strong>Uso Clínico:</strong> @((Model.Clinico ?? false) ? "Sí" : "No")</div>
+                    <div class="mb-3"><strong>Categoría:</strong> @Model.Categoria?.Nombre</div>
+                    <div class="mb-3"><strong>Proveedor:</strong> @Model.Proveedor?.Nombre</div>
+
+                    <!-- BOTONES -->
+                    <form asp-action="Index" method="get">
+                        <button type="submit" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">Volver</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

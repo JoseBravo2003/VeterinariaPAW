@@ -54,7 +54,7 @@ namespace VeterinariaPAW.Controllers
             }
 
             GuardarCarrito(carrito);
-            return RedirectToAction("Index", "Productos", new { area = "" });
+            return RedirectToAction("IndexClientes", "Productos", new { area = "" });
         }
 
         public IActionResult Eliminar(int id)
@@ -117,5 +117,42 @@ namespace VeterinariaPAW.Controllers
             TempData["CompraExitosa"] = "¡Compra realizada!";
             return RedirectToAction("Index");
         }
+        public async Task<IActionResult> ComprarTodo()
+        {
+            var carrito = ObtenerCarrito();
+            foreach (var item in carrito)
+            {
+                var producto = await _context.Producto.FindAsync(item.Producto.Id);
+                if (producto != null && producto.Stock > 0)
+                {
+                    producto.Stock -= item.cantidad;
+                    _context.Update(producto);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            carrito.Clear();
+            GuardarCarrito(carrito);
+            TempData["CompraExitosa"] = "¡Compra realizada!";
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult ActualizarCantidad(int productoId, int cantidad)
+        {
+            var carrito = ObtenerCarrito();
+            var item = carrito.FirstOrDefault(c => c.Producto.Id == productoId);
+
+            if (item != null && cantidad > 0)
+            {
+                item.cantidad = cantidad;
+                GuardarCarrito(carrito);
+            }
+
+            // Retorna el precio total actualizado
+            var total = carrito.Sum(i => decimal.Parse(i.Producto.Precio) * i.cantidad);
+            return Json(new { total = total.ToString("F2") });
+        }
+
+
     }
 }
