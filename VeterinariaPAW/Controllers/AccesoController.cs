@@ -100,7 +100,7 @@ namespace VeterinariaPAW.Controllers
             if (string.IsNullOrEmpty(cedula))
                 return Json(new { exito = false });
 
-            var resultado = await _gometaService.BuscarCedula(cedula); // Asegúrate de inyectar el servicio
+            var resultado = await _gometaService.BuscarCedula(cedula);
 
             if (resultado != null)
             {
