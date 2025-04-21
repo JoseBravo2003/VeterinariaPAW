@@ -13,13 +13,13 @@
 - **API:** Obtener nombre a través de cédula.
 - **Base de datos:** SQL Server.
 
-## **Paquetes de Nuget utilizados **
+## **Paquetes Nuget**
 - Microsoft.EntityFrameworkCore.Design.
 - Microsoft.EntityFrameworkCore.SqlServer.
 - Microsoft.EntityFrameworkCore.Tools.
 - Microsoft.VisualStudio.Web.CodeGeneration.Design
 
-## **Principios SOLID **
+## **Principio SOLID**
 - Single Responsibility Principle.
 - Open/Closed Principle.
 - Liskov Substitution Principle.
